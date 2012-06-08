@@ -7,19 +7,22 @@ class Inpainting
 {
 public:
   typedef itk::Image<unsigned char> ImageType;
-
+  
   Inpainting();
 
   /** Set the image to inpaint. */
-  void SetImage(const ImageType* const image);
+  virtual void SetImage(const ImageType* const image);
 
   /** Set the inpainting mask. */
-  void SetMask(const Mask* const mask);
-  
-private:
+  virtual void SetMask(const Mask* const mask);
+
+  virtual void Inpaint() = 0;
+protected:
   ImageType::Pointer Image;
+  ImageType::Pointer Output;
   Mask::Pointer MaskImage;
 
+  itk::ImageRegion<2> HoleBoundingBox;
 };
 
 #endif

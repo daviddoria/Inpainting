@@ -10,19 +10,30 @@
 // Submodules
 #include "Mask/Mask.h"
 
-class FastDigitalInpainting : Inpainting
+class FastDigitalInpainting : public Inpainting
 {
 public:
+
+  typedef itk::Image<float, 2> KernelType;
 
   FastDigitalInpainting();
 
   /** Perform an iteration of the fast digital inpainting algorithm. */
   void Iterate();
 
-  
-private:
+  void SetNumberOfIterations(const unsigned int numberOfIterations);
 
+  void Inpaint();
+
+private:
+  void CreateConstantKernel();
+  
+  KernelType::Pointer Kernel;
+  Mask::Pointer CurrentMask;
+  ImageType::Pointer CurrentImage;
+  
   unsigned int NumberOfCompletedIterations;
+  unsigned int NumberOfIterations;
 };
 
 #endif
