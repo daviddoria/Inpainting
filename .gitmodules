@@ -1,0 +1,3 @@
+[submodule "Mask"]
+	path = Mask
+	url = https://github.com/daviddoria/Mask.git
