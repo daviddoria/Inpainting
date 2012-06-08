@@ -1,19 +1,6 @@
-#include "vtkBertalmioInpainting.h"
+#include "BertalmioInpainting.h"
 
-#include "vtkImageData.h"
-#include "vtkMath.h"
- #include "vtkObjectFactory.h"
-#include "vtkStreamingDemandDrivenPipeline.h"
-#include "vtkInformationVector.h"
-#include "vtkInformation.h"
-#include "vtkDataObject.h"
-#include "vtkSmartPointer.h"
-#include "vtkImageGradient.h"
-#include "vtkImageLaplacian.h"
-
-vtkStandardNewMacro(vtkBertalmioInpainting);
-
-void vtkBertalmioInpainting::Iterate(int iteration)
+void BertalmioInpainting::Iterate(int iteration)
 {
   vtkSmartPointer<vtkImageGradient> gradientFilter =
     vtkSmartPointer<vtkImageGradient>::New();

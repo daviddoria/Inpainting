@@ -1,28 +1,13 @@
 // Based on "Image Inpainting" by Bertalmio, Sapiro, Caselles, and Ballester
-#ifndef __vtkBertalmioInpainting_h
-#define __vtkBertalmioInpainting_h
+#ifndef BertalmioInpainting_h
+#define BertalmioInpainting_h
 
-#include "vtkInpainting.h"
-
-#include <vtkSmartPointer.h>
-
-class vtkImageData;
-
-class vtkBertalmioInpainting : public vtkInpainting
+class BertalmioInpainting
 {
 public:
-  vtkTypeMacro(vtkBertalmioInpainting,vtkInpainting);
-  static vtkBertalmioInpainting *New();
-
-protected:
   vtkBertalmioInpainting(){}
-  ~vtkBertalmioInpainting(){}
 
   void Iterate(int iteration);
-
-private:
-  vtkBertalmioInpainting(const vtkBertalmioInpainting&);  // Not implemented.
-  void operator=(const vtkBertalmioInpainting&);  // Not implemented.
 
 };
 

@@ -1,18 +1,8 @@
-#include "vtkFastDigitalInpainting.h"
+#include "FastDigitalInpainting.h"
 
-#include "vtkObjectFactory.h"
-#include "vtkImageConvolve.h"
-#include "vtkImageData.h"
-#include "vtkCommand.h"
-
-// For testing only
-#include "vtkCommand.h"
-#include "vtkJPEGWriter.h"
 #include <sstream>
 
-vtkStandardNewMacro(vtkFastDigitalInpainting);
-
-void vtkFastDigitalInpainting::Iterate(int iteration)
+void FastDigitalInpainting::Iterate(int iteration)
 {
   double c = 1./8.;
   double kernel[9] = {c,c,c,c,0,c,c,c,c};
