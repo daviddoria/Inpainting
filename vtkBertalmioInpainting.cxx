@@ -17,7 +17,7 @@ void vtkBertalmioInpainting::Iterate(int iteration)
 {
   vtkSmartPointer<vtkImageGradient> gradientFilter =
     vtkSmartPointer<vtkImageGradient>::New();
-  gradientFilter->SetInputConnection(this->Image->GetProducerPort());
+  gradientFilter->SetInputData(this->Image);
   gradientFilter->Update();
 
   // Normalize the gradient
@@ -49,7 +49,7 @@ void vtkBertalmioInpainting::Iterate(int iteration)
 
   vtkSmartPointer<vtkImageLaplacian> laplacianFilter =
     vtkSmartPointer<vtkImageLaplacian>::New();
-  laplacianFilter->SetInputConnection(this->Image->GetProducerPort());
+  laplacianFilter->SetInputData(this->Image);
   laplacianFilter->Update();
 
   vtkSmartPointer<vtkImageGradient> laplacianGradientFilter =

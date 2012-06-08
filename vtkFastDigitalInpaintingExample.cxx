@@ -31,7 +31,7 @@ class CustomStyle : public vtkInteractorStyleImage
       std::cout << "CustomStyle::CallbackFunction called." << std::endl;
       vtkImageData* intermediate = this->Inpainting->GetIntermediateOutput();
       intermediate->Modified();
-      this->InpaintedActor->SetInput(intermediate);
+      this->InpaintedActor->SetInputData(intermediate);
       this->RightRenderer->ResetCamera();
       this->RightRenderer->Render();
       this->Interactor->GetRenderWindow()->Render();
@@ -46,12 +46,12 @@ class CustomStyle : public vtkInteractorStyleImage
         {
         this->RightRenderer->AddActor(this->InpaintedActor);
         this->Inpainting->SetMaximumIterations(1000);
-        this->Inpainting->SetInputConnection(0, this->Image->GetProducerPort());
-        this->Inpainting->SetInputConnection(1, this->Mask->GetProducerPort());
+        this->Inpainting->SetInputData(0, this->Image);
+        this->Inpainting->SetInputData(1, this->Mask);
         this->Inpainting->AddObserver(vtkCommand::WarningEvent, this, &CustomStyle::CallbackFunction);
         this->Inpainting->Update();
 
-        this->InpaintedActor->SetInput(this->Inpainting->GetOutput());
+        this->InpaintedActor->SetInputData(this->Inpainting->GetOutput());
         this->RightRenderer->ResetCamera();
         this->RightRenderer->Render();
         }
@@ -90,11 +90,11 @@ int main(int argc, char *argv[])
 
   vtkSmartPointer<vtkImageActor> originalActor =
     vtkSmartPointer<vtkImageActor>::New();
-  originalActor->SetInput(imageReader->GetOutput());
+  originalActor->SetInputData(imageReader->GetOutput());
 
   vtkSmartPointer<vtkImageActor> maskActor =
     vtkSmartPointer<vtkImageActor>::New();
-  maskActor->SetInput(maskReader->GetOutput());
+  maskActor->SetInputData(maskReader->GetOutput());
   maskActor->SetOpacity(.5);
 
   // There will be one render window

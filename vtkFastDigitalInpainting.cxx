@@ -18,7 +18,7 @@ void vtkFastDigitalInpainting::Iterate(int iteration)
   double kernel[9] = {c,c,c,c,0,c,c,c,c};
   vtkSmartPointer<vtkImageConvolve> convolveFilter =
     vtkSmartPointer<vtkImageConvolve>::New();
-  convolveFilter->SetInputConnection(this->Output->GetProducerPort());
+  convolveFilter->SetInputData(this->Output);
   convolveFilter->SetKernel3x3(kernel);
   convolveFilter->Update();
 
@@ -41,7 +41,7 @@ void vtkFastDigitalInpainting::Iterate(int iteration)
   std::stringstream ss;
   ss << "output_" << iteration << ".jpg";
   outputWriter->SetFileName(ss.str().c_str());
-  outputWriter->SetInputConnection(this->Output->GetProducerPort());
+  outputWriter->SetInputData(this->Output);
   outputWriter->Write();
   }
 

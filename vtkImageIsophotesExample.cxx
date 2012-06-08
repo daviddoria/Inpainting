@@ -50,7 +50,7 @@ int main(int, char *[])
 
   vtkSmartPointer<vtkImageActor> originalActor =
     vtkSmartPointer<vtkImageActor>::New();
-  originalActor->SetInput(drawing->GetOutput());
+  originalActor->SetInputData(drawing->GetOutput());
 
   vtkSmartPointer<vtkArrowSource> arrowSource =
     vtkSmartPointer<vtkArrowSource>::New();

@@ -28,7 +28,7 @@ int vtkImageIsophotes::RequestData(vtkInformation *vtkNotUsed(request),
 
   vtkSmartPointer<vtkImageGradient> gradientFilter =
     vtkSmartPointer<vtkImageGradient>::New();
-  gradientFilter->SetInputConnection(input->GetProducerPort());
+  gradientFilter->SetInputData(input);
   gradientFilter->SetDimensionality(3);
   gradientFilter->Update();
 
@@ -56,15 +56,16 @@ int vtkImageIsophotes::RequestData(vtkInformation *vtkNotUsed(request),
   vtkSmartPointer<vtkImageVectorRotate> vectorRotate =
     vtkSmartPointer<vtkImageVectorRotate>::New();
   vectorRotate->SetZRotation(90);
-  vectorRotate->SetInputConnection(gradient->GetProducerPort());
+  vectorRotate->SetInputData(gradient);
   vectorRotate->Update();
 
   output->ShallowCopy(vectorRotate->GetOutput());
   
   // Without these lines, the output will appear real but will not work as the input to any other filters
   output->SetExtent(input->GetExtent());
-  output->SetUpdateExtent(output->GetExtent());
-  output->SetWholeExtent(output->GetExtent());
+//   output->SetUpdateExtent(output->GetExtent());
+//   output->SetWholeExtent(output->GetExtent());
+  output->SetExtent(output->GetExtent());
 
   return 1;
 }

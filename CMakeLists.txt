@@ -1,14 +1,28 @@
 cmake_minimum_required(VERSION 2.6)
 PROJECT(Inpainting)
- 
+
 FIND_PACKAGE(VTK REQUIRED)
 INCLUDE(${VTK_USE_FILE})
- 
-ADD_EXECUTABLE(Inpainting vtkFastDigitalInpaintingExample.cxx vtkInpainting.cxx vtkBertalmioInpainting.cxx vtkFastDigitalInpainting.cxx)
-TARGET_LINK_LIBRARIES(Inpainting vtkHybrid)
+
+include_directories(/media/portable/src/github/vtkBinaryBlobPerimeter/)
+
+ADD_EXECUTABLE(FastDigitalInpainting vtkFastDigitalInpaintingExample.cxx vtkInpainting.cxx vtkBertalmioInpainting.cxx vtkFastDigitalInpainting.cxx)
+TARGET_LINK_LIBRARIES(FastDigitalInpainting vtkHybrid)
+
+ADD_EXECUTABLE(vtkInpaintingCriminisiExample vtkInpaintingCriminisiExample.cxx vtkInpainting.cxx vtkInpaintingCriminisi.cxx
+vtkImageVectorRotate.cxx
+vtkImageIsophotes.cxx
+/media/portable/src/github/vtkBinaryBlobPerimeter/vtkBinaryBlobPerimeter2D.cxx)
+TARGET_LINK_LIBRARIES(vtkInpaintingCriminisiExample vtkHybrid)
 
 ADD_EXECUTABLE(vtkImageVectorRotateExample vtkImageVectorRotateExample.cxx vtkImageVectorRotate.cxx)
 TARGET_LINK_LIBRARIES(vtkImageVectorRotateExample vtkHybrid)
 
 ADD_EXECUTABLE(vtkImageIsophotesExample vtkImageIsophotesExample.cxx vtkImageIsophotes.cxx vtkImageVectorRotate.cxx)
 TARGET_LINK_LIBRARIES(vtkImageIsophotesExample vtkHybrid)
+
+ADD_EXECUTABLE(PatchMatchExample PatchMatchExample.cxx vtkInpainting.cxx vtkInpaintingCriminisi.cxx
+vtkImageIsophotes.cxx
+vtkImageVectorRotate.cxx
+/media/portable/src/github/vtkBinaryBlobPerimeter/vtkBinaryBlobPerimeter2D.cxx)
+TARGET_LINK_LIBRARIES(PatchMatchExample vtkHybrid)

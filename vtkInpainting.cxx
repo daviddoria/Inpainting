@@ -49,7 +49,7 @@ int vtkInpainting::RequestData(vtkInformation *vtkNotUsed(request),
 
   vtkSmartPointer<vtkImageLuminance> imageLuminanceFilter =
     vtkSmartPointer<vtkImageLuminance>::New();
-  imageLuminanceFilter->SetInputConnection(image->GetProducerPort());
+  imageLuminanceFilter->SetInputData(image);
   imageLuminanceFilter->Update();
   this->Image->ShallowCopy(imageLuminanceFilter->GetOutput());
 
@@ -68,7 +68,7 @@ int vtkInpainting::RequestData(vtkInformation *vtkNotUsed(request),
 
   vtkSmartPointer<vtkImageMagnitude> maskMagnitudeFilter =
     vtkSmartPointer<vtkImageMagnitude>::New();
-  maskMagnitudeFilter->SetInputConnection(mask->GetProducerPort());
+  maskMagnitudeFilter->SetInputData(mask);
   maskMagnitudeFilter->Update();
 
   {
@@ -96,7 +96,7 @@ int vtkInpainting::RequestData(vtkInformation *vtkNotUsed(request),
   vtkSmartPointer<vtkJPEGWriter> maskWriter =
     vtkSmartPointer<vtkJPEGWriter>::New();
   maskWriter->SetFileName("InitialMask.jpg");
-  maskWriter->SetInputConnection(this->Mask->GetProducerPort());
+  maskWriter->SetInputData(this->Mask);
   maskWriter->Write();
   }
   
@@ -111,7 +111,7 @@ int vtkInpainting::RequestData(vtkInformation *vtkNotUsed(request),
   vtkSmartPointer<vtkJPEGWriter> imageWriter =
     vtkSmartPointer<vtkJPEGWriter>::New();
   imageWriter->SetFileName("InitialImage.jpg");
-  imageWriter->SetInputConnection(this->Output->GetProducerPort());
+  imageWriter->SetInputData(this->Output);
   imageWriter->Write();
   }
   
@@ -126,8 +126,9 @@ int vtkInpainting::RequestData(vtkInformation *vtkNotUsed(request),
 
   output->ShallowCopy(this->Output);
   output->SetExtent(image->GetExtent());
-  output->SetUpdateExtent(output->GetExtent());
-  output->SetWholeExtent(output->GetExtent());
+//   output->SetUpdateExtent(output->GetExtent());
+//   output->SetWholeExtent(output->GetExtent());
+  output->SetExtent(output->GetExtent());
   return 1;
 }
 
@@ -140,8 +141,7 @@ void vtkInpainting::FindMaskBoundaryPixels(vtkImageData* boundaryImage)
   this->Mask->GetExtent(extent);
 
   boundaryImage->SetExtent(extent);
-  boundaryImage->SetScalarTypeToUnsignedChar();
-  boundaryImage->SetNumberOfScalarComponents(1);
+  boundaryImage->AllocateScalars(VTK_UNSIGNED_CHAR, 1);
 
   for(int i = extent[0]; i < extent[1]; i++)
     {

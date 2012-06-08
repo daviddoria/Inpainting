@@ -56,8 +56,10 @@ int vtkImageVectorRotate::RequestData(vtkInformation *vtkNotUsed(request),
 
   // Without these lines, the output will appear correct but will not work as the input to any other filters
   output->SetExtent(input->GetExtent());
-  output->SetUpdateExtent(output->GetExtent());
-  output->SetWholeExtent(output->GetExtent());
+//   output->SetUpdateExtent(output->GetExtent());
+//   output->SetWholeExtent(output->GetExtent());
+  
+  output->SetExtent(output->GetExtent());
 
   return 1;
 }
