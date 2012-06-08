@@ -112,16 +112,20 @@ void FastDigitalInpainting::Iterate()
       unsigned int pixelsUsed = 0;
       while(!kernelIterator.IsAtEnd())
         {
-        itk::Index<2> currentIndex = imageIterator.GetIndex() + ITKHelpers::IndexToOffset(kernelIterator.GetIndex());
-        // Only use pixels that were originally valid or have been previously filled
-        if(this->CurrentMask->IsValid(currentIndex))
+        if(!(kernelIterator.GetIndex()[0] == 0 && kernelIterator.GetIndex()[1] == 0))
           {
-          weightSum += kernelIterator.Get();
-          weightedSum += tempImage->GetPixel(currentIndex) * kernelIterator.Get();
-          pixelsUsed++;
-          }
+          itk::Index<2> currentIndex = imageIterator.GetIndex() +
+                                       ITKHelpers::IndexToOffset(kernelIterator.GetIndex());
+          // Only use pixels that were originally valid or have been previously filled
+          if(this->CurrentMask->IsValid(currentIndex))
+            {
+            weightSum += kernelIterator.Get();
+            weightedSum += tempImage->GetPixel(currentIndex) * kernelIterator.Get();
+            pixelsUsed++;
+            }
+          } // end if we are not in the center of the kernel (this pixel is not counted)
         ++kernelIterator;
-        }
+        } // end loop over kernel
 
       if(pixelsUsed > 0)
       {
