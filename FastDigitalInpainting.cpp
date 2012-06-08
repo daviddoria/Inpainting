@@ -12,6 +12,40 @@ FastDigitalInpainting::FastDigitalInpainting() : NumberOfCompletedIterations(0),
   this->CurrentImage = ImageType::New();
 }
 
+void FastDigitalInpainting::CreateGaussianKernel()
+{
+  // Create a tiny image whose center is (0,0) and is filled with 1/8.
+  // (every pixel of the 9 contributes except the center pixel)
+
+  itk::Size<2> size = {{3,3}};
+  //itk::ImageRegion<2> region = ITKHelpers::CornerRegion(size);
+  itk::Index<2> corner = {{-1, -1}};
+  itk::ImageRegion<2> region(corner, size);
+
+  this->Kernel->SetRegions(region);
+  this->Kernel->Allocate();
+  this->Kernel->FillBuffer(0.0f);
+
+  itk::ImageRegionIteratorWithIndex<KernelType> kernelIterator(this->Kernel,
+                                                               this->Kernel->GetLargestPossibleRegion());
+  while(!kernelIterator.IsAtEnd())
+    {
+    itk::Index<2> currentIndex = kernelIterator.GetIndex();
+    if(currentIndex[0] == 0 || currentIndex[1] == 0)
+      {
+      kernelIterator.Set(.176765); // Prescribed in the paper
+      }
+    else
+      {
+      kernelIterator.Set(.073235); // Prescribed in the paper
+      }
+    ++kernelIterator;
+    }
+
+  itk::Index<2> centerPixel = {{0,0}};
+  this->Kernel->SetPixel(centerPixel, 0.0f);
+}
+
 void FastDigitalInpainting::CreateConstantKernel()
 {
   // Create a tiny image whose center is (0,0) and is filled with 1/8.
@@ -37,14 +71,20 @@ void FastDigitalInpainting::SetNumberOfIterations(const unsigned int numberOfIte
 
 void FastDigitalInpainting::Inpaint()
 {
+  //CreateConstantKernel();
+  CreateGaussianKernel();
+  
   ITKHelpers::DeepCopy(this->Image.GetPointer(), this->CurrentImage.GetPointer());
 
   this->CurrentMask->DeepCopyFrom(this->MaskImage.GetPointer());
 
   for(unsigned int iteration = 0; iteration < this->NumberOfIterations; ++iteration)
   {
+    std::cout << "Iteration " << this->NumberOfCompletedIterations << "..." << std::endl;
     Iterate();
   }
+
+  ITKHelpers::DeepCopy(this->CurrentImage.GetPointer(), this->Output.GetPointer());
 }
 
 void FastDigitalInpainting::Iterate()
@@ -61,11 +101,12 @@ void FastDigitalInpainting::Iterate()
 
   while(!imageIterator.IsAtEnd())
     {
+    itk::Index<2> indexToFill = imageIterator.GetIndex();
     // Only modify pixels that are in the original hole
-    if(this->MaskImage->IsValid(imageIterator.GetIndex()))
+    if(this->MaskImage->IsHole(indexToFill))
     {
       itk::ImageRegionIteratorWithIndex<KernelType> kernelIterator(this->Kernel,
-                                                                  this->Kernel->GetLargestPossibleRegion());
+                                                                   this->Kernel->GetLargestPossibleRegion());
       float weightedSum = 0.0f;
       float weightSum = 0.0f;
       unsigned int pixelsUsed = 0;
@@ -79,6 +120,7 @@ void FastDigitalInpainting::Iterate()
           weightedSum += tempImage->GetPixel(currentIndex) * kernelIterator.Get();
           pixelsUsed++;
           }
+        ++kernelIterator;
         }
 
       if(pixelsUsed > 0)
@@ -97,4 +139,14 @@ void FastDigitalInpainting::Iterate()
   // Copy the filled values to be used in the next iteration
   ITKHelpers::DeepCopy(tempImage.GetPointer(), this->CurrentImage.GetPointer());
   this->CurrentMask->DeepCopyFrom(tempMask);
+
+  std::stringstream ssMask;
+  ssMask << "mask_" << Helpers::ZeroPad(this->NumberOfCompletedIterations, 3) << ".png";
+  ITKHelpers::WriteImage(this->CurrentMask.GetPointer(), ssMask.str());
+
+  std::stringstream ssImage;
+  ssImage << "image_" << Helpers::ZeroPad(this->NumberOfCompletedIterations, 3) << ".png";
+  ITKHelpers::WriteImage(this->CurrentImage.GetPointer(), ssImage.str());
+
+  this->NumberOfCompletedIterations++;
 }

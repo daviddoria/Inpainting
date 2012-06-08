@@ -16,7 +16,12 @@ public:
   /** Set the inpainting mask. */
   virtual void SetMask(const Mask* const mask);
 
+  /** Perform the entire inpainting operation. */
   virtual void Inpaint() = 0;
+
+  /** Get the output. */
+  ImageType* GetOutput();
+  
 protected:
   ImageType::Pointer Image;
   ImageType::Pointer Output;

@@ -25,3 +25,8 @@ void Inpainting::SetMask(const Mask* const mask)
 
   this->HoleBoundingBox = MaskOperations::ComputeHoleBoundingBox(this->MaskImage);
 }
+
+Inpainting::ImageType* Inpainting::GetOutput()
+{
+  return this->Output;
+}

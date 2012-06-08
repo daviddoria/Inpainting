@@ -27,6 +27,7 @@ public:
 
 private:
   void CreateConstantKernel();
+  void CreateGaussianKernel();
   
   KernelType::Pointer Kernel;
   Mask::Pointer CurrentMask;

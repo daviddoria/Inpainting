@@ -30,7 +30,9 @@ int main(int argc, char *argv[])
   FastDigitalInpainting fastDigitalInpainting;
   fastDigitalInpainting.SetImage(image);
   fastDigitalInpainting.SetMask(mask);
+  fastDigitalInpainting.SetNumberOfIterations(100);
   fastDigitalInpainting.Inpaint();
 
+  ITKHelpers::WriteImage(fastDigitalInpainting.GetOutput(), outputFilename);
   return EXIT_SUCCESS;
 }
