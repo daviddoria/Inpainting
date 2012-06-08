@@ -5,10 +5,12 @@ PROJECT(Inpainting)
 FIND_PACKAGE(ITK REQUIRED)
 INCLUDE(${ITK_USE_FILE})
 
+add_subdirectory(ITKHelpers)
+
 ADD_EXECUTABLE(FastDigitalInpainting FastDigitalInpaintingExample.cpp
 Inpainting.cpp BertalmioInpainting.cpp FastDigitalInpainting.cpp)
-TARGET_LINK_LIBRARIES(FastDigitalInpainting ${ITK_LIBRARIES})
+TARGET_LINK_LIBRARIES(FastDigitalInpainting ${ITK_LIBRARIES} ITKHelpers)
 
 ADD_EXECUTABLE(BertalmioInpainting BertalmioInpainting.cpp
 Inpainting.cpp BertalmioInpainting.cpp)
-TARGET_LINK_LIBRARIES(BertalmioInpainting ${ITK_LIBRARIES})
+TARGET_LINK_LIBRARIES(BertalmioInpainting ${ITK_LIBRARIES} ITKHelpers)
