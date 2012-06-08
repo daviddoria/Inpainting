@@ -2,38 +2,43 @@
 
 #include <sstream>
 
-void FastDigitalInpainting::Iterate(int iteration)
+FastDigitalInpainting::FastDigitalInpainting() : NumberOfCompletedIterations(0)
 {
-  double c = 1./8.;
-  double kernel[9] = {c,c,c,c,0,c,c,c,c};
-  vtkSmartPointer<vtkImageConvolve> convolveFilter =
-    vtkSmartPointer<vtkImageConvolve>::New();
-  convolveFilter->SetInputData(this->Output);
-  convolveFilter->SetKernel3x3(kernel);
-  convolveFilter->Update();
+}
 
-  {
-  vtkSmartPointer<vtkJPEGWriter> convolvedWriter =
-    vtkSmartPointer<vtkJPEGWriter>::New();
-  std::stringstream ss;
-  ss << "convovled_" << iteration << ".jpg";
-  convolvedWriter->SetFileName(ss.str().c_str());
-  convolvedWriter->SetInputConnection(convolveFilter->GetOutputPort());
-  convolvedWriter->Write();
-  }
 
-  // Update the next step of the output
-  CopyImageInRegion(this->Output, this->Mask, convolveFilter->GetOutput());
-
-  {
-  vtkSmartPointer<vtkJPEGWriter> outputWriter =
-    vtkSmartPointer<vtkJPEGWriter>::New();
-  std::stringstream ss;
-  ss << "output_" << iteration << ".jpg";
-  outputWriter->SetFileName(ss.str().c_str());
-  outputWriter->SetInputData(this->Output);
-  outputWriter->Write();
-  }
+void FastDigitalInpainting::Iterate()
+{
+//   double c = 1./8.;
+//   double kernel[9] = {c,c,c,c,0,c,c,c,c};
+//   vtkSmartPointer<vtkImageConvolve> convolveFilter =
+//     vtkSmartPointer<vtkImageConvolve>::New();
+//   convolveFilter->SetInputData(this->Output);
+//   convolveFilter->SetKernel3x3(kernel);
+//   convolveFilter->Update();
+// 
+//   {
+//   vtkSmartPointer<vtkJPEGWriter> convolvedWriter =
+//     vtkSmartPointer<vtkJPEGWriter>::New();
+//   std::stringstream ss;
+//   ss << "convovled_" << iteration << ".jpg";
+//   convolvedWriter->SetFileName(ss.str().c_str());
+//   convolvedWriter->SetInputConnection(convolveFilter->GetOutputPort());
+//   convolvedWriter->Write();
+//   }
+// 
+//   // Update the next step of the output
+//   CopyImageInRegion(this->Output, this->Mask, convolveFilter->GetOutput());
+// 
+//   {
+//   vtkSmartPointer<vtkJPEGWriter> outputWriter =
+//     vtkSmartPointer<vtkJPEGWriter>::New();
+//   std::stringstream ss;
+//   ss << "output_" << iteration << ".jpg";
+//   outputWriter->SetFileName(ss.str().c_str());
+//   outputWriter->SetInputData(this->Output);
+//   outputWriter->Write();
+//   }
 
 }
 

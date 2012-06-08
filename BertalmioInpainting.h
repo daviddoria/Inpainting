@@ -5,7 +5,7 @@
 class BertalmioInpainting
 {
 public:
-  vtkBertalmioInpainting(){}
+  BertalmioInpainting(){}
 
   void Iterate(int iteration);
 
