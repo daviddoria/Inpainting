@@ -19,7 +19,10 @@ public:
   FastDigitalInpainting();
 
   /** Perform an iteration of the fast digital inpainting algorithm. */
-  void Iterate();
+  void IterateSmart();
+  void IterateMedium();
+  void IterateNaive();
+  void IterateFDI();
 
   void SetNumberOfIterations(const unsigned int numberOfIterations);
 

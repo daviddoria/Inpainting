@@ -28,6 +28,7 @@ protected:
   Mask::Pointer MaskImage;
 
   itk::ImageRegion<2> HoleBoundingBox;
+  itk::ImageRegion<2> FullRegion;
 };
 
 #endif

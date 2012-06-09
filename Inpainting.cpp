@@ -17,6 +17,8 @@ void Inpainting::SetImage(const ImageType* const image)
 
   // Copy the input
   ITKHelpers::DeepCopy(image, this->Image.GetPointer());
+
+  this->FullRegion = image->GetLargestPossibleRegion();
 }
 
 void Inpainting::SetMask(const Mask* const mask)
