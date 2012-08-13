@@ -1,10 +1,5 @@
-This software allows the user to inpaint an image using a texture synthesis based method.
-This implementation is based on "Object Removal By Exemplar Based Inpainting" by A. Criminisi.
+This software allows the user to inpaint an image using multiple techniques.
 
-License: See LICENSE file in base directory.
+Currently, FastDigitalInpainting is implemented, but seems to display strange behavior in that the inpainted region looks correct after a few iterations, but then gets darker and darker as further iterations are carried out. If anyone can see the problem, please let me know!
 
-Implementation notes:
-Throughout the code, the size of square patches are described by their "radius". That is, a 9x9 square patch has radius 4.
-
-This code and an accompanying documentation article was submitted to the Insight Journal and can be found here:
-http://www.insight-journal.org/browse/publication/787
+Please note that  BertalmioInpainting was never implemented. If you care to write it, please let me know!
